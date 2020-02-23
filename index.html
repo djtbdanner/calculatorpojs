@@ -109,7 +109,7 @@
         });
         var summaryString = "";
         if (loanItem.value != null && loanItem.value.length > 0) {
-          summaryString += "Payment Amortization schedult for " + loanItem.value + ".<br\>"
+          summaryString += "Payment Amortization schedule for " + loanItem.value + ".<br\>"
         }
         summaryString += "Monthly Payment " + formatDollar(paymentData.payment.amount) + ", Total Interest " + formatDollar(paymentData.payment.interest);
         summaryElement.innerHTML = summaryString;
