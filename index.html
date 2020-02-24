@@ -33,16 +33,40 @@
         });
 
         input.addEventListener("blur", function() {
-          shouldBuild();
+          checkAndBuildAmortization();
         });
       });
     }
 
-    function shouldBuild() {
+   }
+
+    function createTD(text, tableRow) {
+      var td = document.createElement("td");
+      var text = document.createTextNode(text);
+      td.append(text);
+      tableRow.append(td);
+    }
+
+    function buildLoan(){
       var loanAmount = document.getElementById("loanAmount");
       var interestRate = document.getElementById("interestRate");
       var numberOfPayments = document.getElementById("numberOfPayments");
       var startDate = document.getElementById("startDate");
+      var loan = new Object();
+      loan.amount = loanAmount.value;
+      loan.interest = interestRate.value;
+      loan.payments = numberOfPayments.value;
+      loan.startDate = startDate.valueAsDate;
+      if (loan.startDate == null) {
+        loan.startDate = new Date();
+        startDate.valueAsDate = loan.startDate;
+      }
+      loan.startDate = addMonthsUTC(loan.startDate, 1);
+      return loan;
+    }
+
+    function checkAndBuildAmortization()) {
+
       var loanItem = document.getElementById("loanItem");
       var summaryElement = document.getElementById("summaryInfo");
       var amortDiv = document.getElementById("amortDiv");
@@ -50,61 +74,19 @@
       tableBody.innerHTML = "";
       if (loanAmount.checkValidity() && loanAmount.value.length > 0 && interestRate.checkValidity() && interestRate.value.length > 0 && numberOfPayments.checkValidity() && numberOfPayments.value.length > 0) {
         amortDiv.style.visibility = "visible";
-        var loan = new Object();
-        loan.amount = loanAmount.value;
-        loan.interest = interestRate.value;
-        loan.payments = numberOfPayments.value;
-        loan.startDate = startDate.valueAsDate;
-        if (loan.startDate == null) {
-          loan.startDate = new Date();
-          startDate.valueAsDate = loan.startDate;
-        }
-        loan.startDate = addMonthsUTC(loan.startDate, 1);
-        var paymentData = calculate(loan);
+
+        var paymentData = calculate(buildLoan());
 
         paymentData.payments.forEach(payment => {
           var tr = document.createElement("tr");
-          var td = document.createElement("td");
-          var text = document.createTextNode(payment.paymentNumber);
-          td.append(text);
-          tr.append(td);
-
-          td = document.createElement("td");
-          text = document.createTextNode(formatDollar(payment.beginningBalance));
-          td.append(text);
-          tr.append(td);
-
-          td = document.createElement("td");
-          text = document.createTextNode(formatDollar(payment.amount));
-          td.append(text);
-          tr.append(td);
-
-          td = document.createElement("td");
-          text = document.createTextNode(formatDollar(payment.principal));
-          td.append(text);
-          tr.append(td);
-
-          td = document.createElement("td");
-          text = document.createTextNode(formatDollar(payment.interest));
-          td.append(text);
-          tr.append(td);
-
-          td = document.createElement("td");
-          text = document.createTextNode(formatDollar(payment.totalInterest));
-          td.append(text);
-          tr.append(td);
-
-          td = document.createElement("td");
-          text = document.createTextNode(formatDollar(payment.balance));
-          td.append(text);
-          tr.append(td);
-
-          td = document.createElement("td");
-          var dateDue = payment.dueDate;
-          text = document.createTextNode(dateDue.toLocaleDateString(undefined));
-          td.append(text);
-          tr.append(td);
-
+          createTD(payment.paymentNumber, tr);
+          createTD(payment.beginningBalance, tr);
+          createTD(payment.amount, tr);
+          createTD(payment.principal, tr);
+          createTD(payment.interest, tr);
+          createTD(payment.totalInterest, tr);
+          createTD(payment.balance, tr);
+          createTD(payment.dueDate.toLocaleDateString(undefined), tr);
           tableBody.append(tr);
         });
         var summaryString = "";
