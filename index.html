@@ -38,8 +38,6 @@
       });
     }
 
-   }
-
     function createTD(text, tableRow) {
       var td = document.createElement("td");
       var text = document.createTextNode(text);
@@ -47,7 +45,7 @@
       tableRow.append(td);
     }
 
-    function buildLoan(){
+    function buildLoan() {
       var loanAmount = document.getElementById("loanAmount");
       var interestRate = document.getElementById("interestRate");
       var numberOfPayments = document.getElementById("numberOfPayments");
@@ -65,7 +63,7 @@
       return loan;
     }
 
-    function checkAndBuildAmortization()) {
+    function checkAndBuildAmortization() {
 
       var loanItem = document.getElementById("loanItem");
       var summaryElement = document.getElementById("summaryInfo");
@@ -74,7 +72,6 @@
       tableBody.innerHTML = "";
       if (loanAmount.checkValidity() && loanAmount.value.length > 0 && interestRate.checkValidity() && interestRate.value.length > 0 && numberOfPayments.checkValidity() && numberOfPayments.value.length > 0) {
         amortDiv.style.visibility = "visible";
-
         var paymentData = calculate(buildLoan());
 
         paymentData.payments.forEach(payment => {
