@@ -69,6 +69,8 @@
       var summaryElement = document.getElementById("summaryInfo");
       var amortDiv = document.getElementById("amortDiv");
       var tableBody = document.getElementById("tableBody");
+      var loanAmount = document.getElementById("loanAmount");
+      var interestRate = document.getElementById("interestRate");
       tableBody.innerHTML = "";
       if (loanAmount.checkValidity() && loanAmount.value.length > 0 && interestRate.checkValidity() && interestRate.value.length > 0 && numberOfPayments.checkValidity() && numberOfPayments.value.length > 0) {
         amortDiv.style.visibility = "visible";
@@ -86,11 +88,15 @@
           createTD(payment.dueDate.toLocaleDateString(undefined), tr);
           tableBody.append(tr);
         });
+
+
         var summaryString = "";
         if (loanItem.value != null && loanItem.value.length > 0) {
-          summaryString += "Payment Amortization schedule for " + loanItem.value + ".<br\>"
+          summaryString += loanItem.value + "<br\>";
         }
-        summaryString += "Monthly Payment " + formatDollar(paymentData.payment.amount) + ", Total Interest " + formatDollar(paymentData.payment.interest);
+
+        summaryString += "Monthly Payment: " + formatDollar(paymentData.payment.amount) + ", Total Interest: " + formatDollar(paymentData.payment.interest) + ".";
+        summaryString += "<br/><span class='print-only'>Loan Amount: " + formatDollar(parseInt(loanAmount.value, 10)) + ", Interest Rate: " + interestRate.value + "%.</span>";
         summaryElement.innerHTML = summaryString;
       } else {
         amortDiv.style.visiblity = "hidden";
@@ -141,7 +147,7 @@
           <tr>
             <td colspan="2">
               <label>Loan item</label>
-              <input class="form-controlbs" id="loanItem" name="loanItem" placeholder="Optionally add item or items loan is for.">
+              <input class="form-controlbs" id="loanItem" name="loanItem" placeholder="Optional comment for print out.">
             </td>
           </tr>
         </tbody>

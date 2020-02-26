@@ -8,12 +8,12 @@
         display: block;
     }
 }
-
-
-/* Smartphones (portrait and landscape) ———– */
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) {
+@media screen
+{
+  .print-only, .print-only *
+  {
+      display: none !important;
+  }
 }
 
 /* From bootstrap */
