@@ -6,7 +6,6 @@
   <meta name="description" content="Payment calculator/printer">
   <meta name="keywords" content="loan,calculator,amortization calculator,interest">
   <meta name="author" content="Dave Danner">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
 </head>
@@ -38,8 +37,11 @@
       });
     }
 
-    function createTD(text, tableRow) {
+    function createTD(text, tableRow, hideIfSmall) {
       var td = document.createElement("td");
+      if (hideIfSmall){
+        td.className="small-screen";
+      }
       var text = document.createTextNode(text);
       td.append(text);
       tableRow.append(td);
@@ -78,13 +80,13 @@
 
         paymentData.payments.forEach(payment => {
           var tr = document.createElement("tr");
-          createTD(payment.paymentNumber, tr);
-          createTD(payment.beginningBalance, tr);
-          createTD(payment.amount, tr);
-          createTD(payment.principal, tr);
-          createTD(payment.interest, tr);
-          createTD(payment.totalInterest, tr);
-          createTD(payment.balance, tr);
+          createTD(payment.paymentNumber, tr, false);
+          createTD(formatDollar(payment.beginningBalance), tr, false);
+          createTD(formatDollar(payment.amount), tr, false);
+          createTD(formatDollar(payment.principal), tr, false);
+          createTD(formatDollar(payment.interest), tr, false);
+          createTD(formatDollar(payment.totalInterest), tr, true);
+          createTD(formatDollar(payment.balance), tr, true);
           createTD(payment.dueDate.toLocaleDateString(undefined), tr);
           tableBody.append(tr);
         });
@@ -155,16 +157,16 @@
       <div id="amortDiv" style="visibility:hidden;">
         <h4 class="text-info text-center" id="summaryInfo">
         </h4>
-        <table id="amortTable" class="table table-bordered table-condensed table-striped">
-          <thead class="thead-inverse">
+        <table id="amortTable" class="table table-bordered table-condensed table-striped" width="100%">
+          <thead>
             <tr>
               <th>#</th>
               <th>Balance</th>
               <th>Payment</th>
               <th>Principal</th>
               <th>Interest</th>
-              <th>Total Interest</th>
-              <th>End Balance</th>
+              <th class="small-screen">Total Interest</th>
+              <th class="small-screen">End Balance</th>
               <th>Due Date</th>
             </tr>
           </thead>
