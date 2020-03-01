@@ -7,11 +7,12 @@
   <meta name="keywords" content="loan,calculator,amortization calculator,interest">
   <meta name="author" content="Dave Danner">
   <link rel="stylesheet" href="css/style.css">
-  <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 
 <body>
   <script src="js/calculator.js"></script>
+  <script src="js/elements.js"></script>
   <script>
     window.onload = function() {
       document.getElementById('startDate').valueAsDate = new Date();
@@ -36,77 +37,8 @@
         });
       });
     }
-
-    function createTD(text, tableRow, hideIfSmall) {
-      var td = document.createElement("td");
-      if (hideIfSmall){
-        td.className="small-screen";
-      }
-      var text = document.createTextNode(text);
-      td.append(text);
-      tableRow.append(td);
-    }
-
-    function buildLoan() {
-      var loanAmount = document.getElementById("loanAmount");
-      var interestRate = document.getElementById("interestRate");
-      var numberOfPayments = document.getElementById("numberOfPayments");
-      var startDate = document.getElementById("startDate");
-      var loan = new Object();
-      loan.amount = loanAmount.value;
-      loan.interest = interestRate.value;
-      loan.payments = numberOfPayments.value;
-      loan.startDate = startDate.valueAsDate;
-      if (loan.startDate == null) {
-        loan.startDate = new Date();
-        startDate.valueAsDate = loan.startDate;
-      }
-      loan.startDate = addMonthsUTC(loan.startDate, 1);
-      return loan;
-    }
-
-    function checkAndBuildAmortization() {
-
-      var loanItem = document.getElementById("loanItem");
-      var summaryElement = document.getElementById("summaryInfo");
-      var amortDiv = document.getElementById("amortDiv");
-      var tableBody = document.getElementById("tableBody");
-      var loanAmount = document.getElementById("loanAmount");
-      var interestRate = document.getElementById("interestRate");
-      tableBody.innerHTML = "";
-      if (loanAmount.checkValidity() && loanAmount.value.length > 0 && interestRate.checkValidity() && interestRate.value.length > 0 && numberOfPayments.checkValidity() && numberOfPayments.value.length > 0) {
-        amortDiv.style.visibility = "visible";
-        var paymentData = calculate(buildLoan());
-
-        paymentData.payments.forEach(payment => {
-          var tr = document.createElement("tr");
-          createTD(payment.paymentNumber, tr, false);
-          createTD(formatDollar(payment.beginningBalance), tr, false);
-          createTD(formatDollar(payment.amount), tr, false);
-          createTD(formatDollar(payment.principal), tr, false);
-          createTD(formatDollar(payment.interest), tr, false);
-          createTD(formatDollar(payment.totalInterest), tr, true);
-          createTD(formatDollar(payment.balance), tr, true);
-          createTD(payment.dueDate.toLocaleDateString(undefined), tr);
-          tableBody.append(tr);
-        });
-
-
-        var summaryString = "";
-        if (loanItem.value != null && loanItem.value.length > 0) {
-          summaryString += loanItem.value + "<br\>";
-        }
-
-        summaryString += "Monthly Payment: " + formatDollar(paymentData.payment.amount) + ", Total Interest: " + formatDollar(paymentData.payment.interest) + ".";
-        summaryString += "<br/><span class='print-only'>Loan Amount: " + formatDollar(parseInt(loanAmount.value, 10)) + ", Interest Rate: " + interestRate.value + "%.</span>";
-        summaryElement.innerHTML = summaryString;
-      } else {
-        amortDiv.style.visiblity = "hidden";
-        summaryElement.innerHTML = "";
-      }
-    }
   </script>
-  <div>
+
     <h2 class="no-print">Loan Calculator</h2>
     <form>
       <table class="table no-print">
@@ -115,20 +47,20 @@
             <td>
               <label>Loan Amount</label>
               <input class="form-controlbs" maxlength="8" minlength="1" name="loanAmount" id="loanAmount" pattern="[0-9.]{1,9}" placeholder="Loan Amount" onblur="this.checkValidity();" type="text" title="Loan Amount is required and must be numeric.">
-              <div id="loanAmountwarn" style="visibility:hidden;">
+              <span id="loanAmountwarn" style="visibility:hidden;">
                 <small class="text-dangerbs">
-                  Loan Amount is required and must be numeric.
+                  Must be numeric.
                 </small>
-              </div>
+              </span>
             </td>
             <td>
               <label> Interest Rate %</label>
               <input class="form-controlbs" maxlength="3" minlength="1" id="interestRate" name="interestRate" pattern="[0-9.]{1,4}" placeholder="Interest Rate %" type="text">
-              <div id="interestRatewarn" style="visibility:hidden;">
+              <span id="interestRatewarn" style="visibility:hidden;">
                 <small class="text-dangerbs">
-                  Interest Rate is required and must be numeric.
+                  Must be numeric.
                 </small>
-              </div>
+              </span>
             </td>
           </tr>
           <tr>
@@ -137,7 +69,7 @@
               <input class="form-controlbs" maxlength="3" minlength="1" id="numberOfPayments" name="numberOfPayments" pattern="[0-9]{1,3}" placeholder="Number Of Payments" type="text">
               <div id="numberOfPaymentswarn" style="visibility:hidden;">
                 <small class="text-dangerbs">
-                  Number of payments/Term is required and must be numeric.
+                  Must be numeric.
                 </small>
               </div>
             </td>
@@ -175,7 +107,6 @@
         </table>
       </div>
     </form>
-  </div>
 </body>
 
 </html>
