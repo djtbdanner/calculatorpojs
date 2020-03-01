@@ -1,5 +1,5 @@
 function createTD(text, tableRow, hideIfSmall) {
-  
+
   var td = document.createElement("td");
   if (hideIfSmall) {
     td.className = "small-screen";
@@ -32,7 +32,7 @@ function buildTable(paymentData, tableBody){
 
   paymentData.payments.forEach(payment => {
     var tr = document.createElement("tr");
-    createTD(payment.paymentNumber, tr, false);
+    createTD(payment.paymentNumber, tr, true);
     createTD(formatDollar(payment.beginningBalance), tr, false);
     createTD(formatDollar(payment.amount), tr, false);
     createTD(formatDollar(payment.principal), tr, false);
