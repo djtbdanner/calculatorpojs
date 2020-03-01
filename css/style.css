@@ -89,6 +89,7 @@
 .text-dangerbs {
   color: #a94442;
   white-space:nowrap;
+  font-size: 12px;
 }
 
 .table {
